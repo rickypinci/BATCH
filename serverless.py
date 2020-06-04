@@ -50,8 +50,10 @@ class MyServerless(threading.Thread):
 
 	def run(self):
 		
-		file_batch_latency = "Latency_perbatch_batch_{}_inter_arrival_{}_time_out{}_.log".format(self.actual_batch_size, self.inter_arrival,self.time_out) # "exp"
-		file_request_latency = "Latency_per_request_batch_{}_inter_arrival_{}_time_out{}_.log".format(self.actual_batch_size, self.inter_arrival,self.time_out) # "exp"
+		file_batch_latency = "Latency_perbatch_batch_{}_inter_arrival_{}_time_out{}_.log".format(self.actual_batch_size,
+				      self.inter_arrival,self.time_out) # "exp"
+		file_request_latency = "Latency_per_request_batch_{}_inter_arrival_{}_time_out{}_.log".format(self.actual_batch_size,
+			              self.inter_arrival,self.time_out) # "exp"
 		mutex_1 = threading.Lock()
 		mutex_2 = threading.Lock()
 		batch_latency = float(self.send_request())
@@ -67,12 +69,13 @@ class MyServerless(threading.Thread):
 			for request in self.request_list:
 				request.latency = request.wait_time + float(batch_latency)
 				mutex_2.acquire()
-				fp.write("Request_latency\t{}\tbatch_size\t{}\t\ttimestamp\t{}\n".format(request.latency,self.batch_size, int(my_clock_time + request.wait_time)))
+				fp.write("Request_latency\t{}\tbatch_size\t{}\t\ttimestamp\t{}\n".format(request.latency,
+					self.batch_size, int(my_clock_time + request.wait_time)))
 				mutex_2.release()
 		fp.close()
 
 
-def read_mmpp_arrival ():
+def read_trace_arrival ():
 	my_arrival = []
 	with open('arrivals/MMPP_arrival15', 'r') as fp:
 		for line in fp:
@@ -88,16 +91,22 @@ def generate_request(batch_size, inter_arrival, time_out):
 	timestamp = 0.0
 	t_out = []
 	bs = []
-	#MMPP_arrival = []
-	#MMPP_arrival =  read_mmpp_arrival() # Uncomment for MMPP2 arrival process
+	
+	# Uncomment for running traces as arrival process
+	#trace_arrival = []
+	#trace_arrival =  read_trace_arrival() 
+	
 	flag_count = False
         print(float(1/float(inter_arrival)))
         total_req = inter_arrival*3600
+	#Change the value in for number of requests
 	for i in range (2000): #total_req 1*batch_size #
 		my_queue.append(MyRequest((total_delay)*1000,0,0)) #int(time.time())
 		count +=1
-		delay = np.random.exponential(scale=(float(1/float(inter_arrival))), size=None) # Uncomment for Exponential arrival process
-		#delay = MMPP_arrival [i%2500000] # Uncomment for MMPP2 arrival process
+		# Uncomment  below line for Exponential arrival process
+		delay = np.random.exponential(scale=(float(1/float(inter_arrival))), size=None) 
+		# Uncomment for MMPP2 arrival process
+		#delay = trace_arrival [i%2500000] 
 
 		if count < batch_size and total_delay + delay <= float(time_out):
 			sleep(delay)
@@ -136,10 +145,10 @@ def generate_request(batch_size, inter_arrival, time_out):
 
 if __name__ == '__main__':
 	print("This is my start time")
-	batch_size = [1,5,10,15,20] #, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-	time_out = [1.0]#[0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] 
+	batch_size = [1,5,10,15,20] 
+	time_out = [1.0] # in seconds 
 	mylambda = boto3.client('lambda')
-	inter_arrivals = [20]#[10, 15, 20, 25, 30, 35, 40, 45,50, 55, 60, 65, 70, 75, 80, 85, 90, 95 ,100]
+	inter_arrivals = [20] # request per seconds
         response = mylambda.update_function_configuration(FunctionName = 'mxnet-lambda-v2', MemorySize=3008)
 	for inter_arrival in inter_arrivals:
 		for batch in batch_size:
