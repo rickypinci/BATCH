@@ -1,5 +1,7 @@
 # BATCH
 BATCH: Adaptive Batching for Efficient MachineLearning Serving on Serverless Platforms
+
+
 **Deployment:**
 To deploy the Lambda serverless function follow the instruction in the following link. However, this code and model provided in the demo does not support batching.
 
