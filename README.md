@@ -3,11 +3,13 @@ BATCH: Adaptive Batching for Efficient MachineLearning Serving on Serverless Pla
 
 
 **prerequisite**
--Configure AWS  Cli configuration (https://aws.amazon.com/cli/)
--boto3(https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+
+- AWS  Cli  (https://aws.amazon.com/cli/)
+- boto3(https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
 ---
 **Deployment:**
+
 To deploy the Lambda serverless function follow the instruction in the following link. However, this tutorial do not support batching.
 
 https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/
