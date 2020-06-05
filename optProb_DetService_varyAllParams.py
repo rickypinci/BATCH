@@ -1,6 +1,7 @@
 import sys
 import time
 import math
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.linalg import expm
@@ -83,7 +84,7 @@ def generateQ(D0, D1, B):
 # Create an array with the service time of each batch (depending on its size)
 def batchServiceTime(B, m, model):
 	
-	if model == 'InceptionV4':
+	if model == 'TF-inceptionV4':
 		t0 = 4.98785373866948
 		t1 = 2.21290624531453
 		t2 = -0.006302148424865
@@ -94,7 +95,7 @@ def batchServiceTime(B, m, model):
 		t7 = -0.00000238944435771044
 		t8 = 0.00000016826351295629
 		t9 = -0.000000000444821512957105
-	elif model == 'Resnet':
+	elif model == 'TF-resnetV2':
 		t0 = 4.10287326093357
 		t1 = 2.44209348386686
 		t2 = -0.003744827715921
@@ -132,8 +133,8 @@ def batchServiceTime(B, m, model):
 		t13 = -0.00000000017570492803764548
 		t14 = 0.0000000000004756195437494171
 	elif model == 'manual':
-		m = 0.036944444444445
-		q = 0.007111111111111
+		m = 0.034
+		q = 0.01
 #		m = 0.081386111111111
 #		q = 0.037277777777778
 #		m = 0.230397222222222
@@ -220,7 +221,7 @@ def findPositionX(B, M, model, x):
 
 	if x < min(v):
 		return 0
-	elif x > max(v):
+	elif x >= max(v):
 		return B-1
 
 	for i in range(B):
@@ -382,7 +383,7 @@ def solveOptimizationProblem(D0, D1, model, quantile, slo, constraint):
 	
 	memories = [x for x in range(1280,3008+1,64)]
 	timeouts = [x for x in np.arange(0.01,0.5,0.01)]
-	batches = [x for x in range(1,20+1,1)]
+	batches = [x for x in range(20,20+1,1)]
 	matLatency = np.zeros((len(memories), len(timeouts), len(batches)))
 	matCost = np.zeros((len(memories), len(timeouts), len(batches)))
 
@@ -466,7 +467,7 @@ def minimizeCost(memories, timeouts, batches, matLatency, matCost, slo):
 		exit(-1)
 	else:
 		for c, b, t, m in zip(minCostList, optBatch, optTimeout, optMem):
-			if c >= minCost * 0.9 and c <= minCost * 1.1:
+			if c >= minCost * 1 and c <= minCost * 1:
 				countOptimal += 1
 				memList.append(m)
 				timeoutList.append(t)
@@ -517,7 +518,7 @@ def minimizeLatency(memories, timeouts, batches, matLatency, matCost, slo):
 		exit(-1)
 	else:
 		for l, b, t, m in zip(minLatList, optBatch, optTimeout, optMem):
-			if l >= minLat * 0.9 and l <= minLat * 1.1:
+			if l >= minLat * 1 and l <= minLat * 1:
 				countOptimal += 1
 				memList.append(m)
 				timeoutList.append(t)
@@ -543,32 +544,20 @@ def getCostRequest(numReqsInBatch, latency, mem):
 	return costMemoryRequest + costInvocationRequest
 
 
-DEBUG = True
-MODE = 'fitting' #'fitting' or 'solver'
-W = 17
-B = 2
-T = 0.01
-M = 2624
-model = 'Resnet'
-
-if MODE == 'fitting':
-	fname = '/home/riccardo/Desktop/Università_Varie/serverless/AWS_experiments/final/newExp/REAL/20181009_09-10_T37ms_M3008_mobinet/ReqRespTime.dat'
-	#fname = '/home/riccardo/Desktop/Università_Varie/serverless/AWS_experiments/results/W14_B20_T10ms_mem3008/ReqRespTime.dat'
-	#fname = 'results/W'+str(W)+'/W'+str(W)+'_bs'+str(B)+'_to'+str(T)+'.dat' #File with simulated or measured request latencies
+def fitting(W, B, T, M, model, trace, DEBUG=True):
+	fname = 'fitting/'+trace+'/real/W'+str(W)+'_B'+str(B)+'_T'+str(int(float(T)*1000))+'_M'+str(M)+'_'+str(model)+'/ReqRespTime.dat'
 	########### START --- Read matrix from text file ##########
-	fnameD0 = '20181011_MAPs/MAP'+str(W)+'_D0'
-	fnameD1 = '20181011_MAPs/MAP'+str(W)+'_D1'
-	#fnameD0 = 'synthetic_workload/W'+str(W)+'_D0'
-	#fnameD1 = 'synthetic_workload/W'+str(W)+'_D1'
+	fnameD0 = 'fitting/'+trace+'/MAPs/MAP'+str(W)+'_D0'
+	fnameD1 = 'fitting/'+trace+'/MAPs/MAP'+str(W)+'_D1'
 	D0 = np.loadtxt(fnameD0, dtype='f', delimiter=',')
 	D1 = np.loadtxt(fnameD1, dtype='f', delimiter=',')
 	########### END --- Read matrix from text file ##########
 
-	out = []
-	memOut = []
-	for M in range(1024,3009,64):
-		memOut.append(M)
-		out.append(latencyPercentileDetService(D0, D1, B, T, M, model, 30, 0.95, 0.01))
+#	out = []
+#	memOut = []
+#	for M in range(1024,3009,64):
+#		memOut.append(M)
+#		out.append(latencyPercentileDetService(D0, D1, B, T, M, model, 30, 0.95, 0.01))
 
 	xModel = np.arange(0,30,0.01)
 	yModel = []
@@ -604,25 +593,21 @@ if MODE == 'fitting':
 
 	testModelGraph(xModel, yModel, xTest, yTest)
 #	printData(xModel, yModel, xTest, yTest)
-#	printError(D0, D1, B, T, xTest)
+	printError(D0, D1, B, T, xTest)
 
 	########## Test ##########
 	#print(batchServiceTime(1, 1920, 'Resnet'))
 	#print(findPositionX(20, 1920, 'Resnet', 3.019809) + 1)
 	#print(getCostRequest(2, batchServiceTime(2, 2752, 'Resnet')[1], 2752))
 	########## Test ##########
-elif MODE == 'solver':
-	for i in range(1,2):
-		fnameD0 = 'Twitter_may25_MAPs/MAP'+str(i)+'_D0'
-		fnameD1 = 'Twitter_may25_MAPs/MAP'+str(i)+'_D1'
-	#	fnameD0 = 'synthetic_workload/W'+str(W)+'_D0'
-	#	fnameD1 = 'synthetic_workload/W'+str(W)+'_D1'
+
+def solver(model, trace, SLO, quantile, constraint, start, end, DEBUG=True):
+	for i in range(start,end):
+		fnameD0 = 'solver/'+trace+'/MAPs/MAP'+str(i)+'_D0'
+		fnameD1 = 'solver/'+trace+'/MAPs/MAP'+str(i)+'_D1'
 		D0 = np.loadtxt(fnameD0, dtype='f', delimiter=',')
 		D1 = np.loadtxt(fnameD1, dtype='f', delimiter=',')
 
-		quantile = 0.95
-		slo =  5.0
-		constraint = 'latency'
 		sol = solveOptimizationProblem(D0, D1, model, quantile, slo, constraint)
 		if constraint == 'latency':	
 			print('---------- SLO on '+str(quantile*100)+'th latency = '+str(slo)+' s ----------')
@@ -640,6 +625,88 @@ elif MODE == 'solver':
 		print(str(quantile*100)+'th Cost = '+str(sol[4])+' USD/request')
 		print('Solutions SLO compliant: '+str(sol[5])+' ('+str(float(sol[5]*100/sol[7]))+'%)')
 		print('Optimal solutions: '+str(sol[6])+' ('+str(float(sol[6]*100/sol[7]))+'%)')
+
+
+
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser(description='This script find the optimal parameters for a serverless system.')
+	parser.add_argument('--model', type=str, choices=['TF-resnetV2', 'TF-inceptionV4', 'mxnet-resnet50'], help='The ML model')
+	parser.add_argument('--percentile', type=float, help='The percentile on which the SLO is specified')
+	parser.add_argument('--slo', type=float, help='The SLO value')
+	parser.add_argument('--constraint', type=str, choices=['latency', 'cost'], help='The measure on which the SLO is specified')
+	parser.add_argument('--trace', type=str, choices=['NYS', 'Twitter'], help='The trace to consider [NYS | Twitter]')
+	parser.add_argument('--start', type=int, help='The first hour to consider (from 1 to 24)')
+	parser.add_argument('--end', type=int, help='The last hour to consider (from 1 to 24). It cannot be smaller than "start"')
+
+	args = parser.parse_args()
+
+	model = args.model
+	percentile = args.percentile
+	slo = args.slo
+	constraint = args.constraint
+	trace = args.trace
+	start = args.start
+	end = args.end
+
+	if start == None:
+		start = 1
+	if end == None:
+		end = 25
+	else:
+		end += 1
+	if start > end:
+		print('"start" parameter must be smaller than or equal to the "end" parameter.')
+		exit(-1)
+
+	if model == None:
+		print('Please, provide a model.')
+		exit(-1)
+	elif(model != 'Resnet' and model != 'InceptionV4' and model != 'mxnet-resnet50'):
+		print('Not supported model.')
+		exit(-1)
+
+	if percentile == None or percentile <= 0 or percentile >= 1:
+		print('Please, provide a correct percentile value.')
+		exit(-1)
+
+	if constraint == None:
+		print('Please, provide a constraint.')
+		exit(-1)
+	elif(constraint != 'latency' and constraint != 'cost'):
+		print('Not supported constraint.')
+		exit(-1)
+
+	if trace == None:
+		print('Please, provide a trace.')
+		exit(-1)
+	elif(trace != 'NYS' and trace != 'Twitter'):
+		print('Not supported trace.')
+		exit(-1)
+	
+	solver(model, trace, slo, percentile, constraint, start, end)
+
+
+
+
+
+
+
+#DEBUG = True
+#MODE = 'solver' #'fitting' or 'solver'
+#W = 7
+#B = 20
+#T = 0.022
+#M = 3008
+#model = 'Resnet'
+#quantile = 0.95
+#slo =  5.0
+#constraint = 'latency'
+#trace = 'NYS'
+
+#if MODE == 'fitting':
+#	fitting(W, B, T, M, model, 'NYS')
+#elif MODE == 'solver':
+#	solver(W, B, T, M, model, trace, slo, quantile, constraint)
 
 
 
