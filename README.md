@@ -30,15 +30,25 @@ Our updated [model and lambda package](https://drive.google.com/drive/folders/1R
 - To run the solver, try: _python solver.py --model TF-inceptionV4 --percentile 0.95 --slo 0.00003 --constraint cost --trace Twitter --start 1 --end 1_
 ---
 **Run Experiments**
-- Run experiment with Exponential arrival python serverless.py exp (default setting).
-   1. These experiments are conducted to generate the profiling data to train the model for prediction.
-   2. Memory size can be adjusted for each experiments by varying the memory value in Serverless.py (default 3008 MB).
-   3. To change the workload intensity set the value to inter_arrival in Serverless.py ( default 20 request per second).
-   4. Adjust the batch size value in serveless.py (default 5).
+
+
+Usage:
+python buffer.py.py (default setting)
+
+- Run experiment with Exponential arrival python buffer.py.py (default setting).
+   1. In default setting it will run experiments  for expontential arrival.
+   2. Memory size is set to 3008 MB.
+   3. Workload intensity is set to 20 request per second.
+   4. Batch size value in serveless.py (default 5).
    5. Timeout values can also be varied (default 1 second).
    
+-Run with exponential arrival:
+
+python buffer.py --batch_size 5 --time_out 1 --arrival_process exp --inter_arrival 10 --function_name inception-v4 --memory 3008 
 - Run experiments using a trace python serverless.py trace $tracelocation
-   2. These experiments are conducted to evaluate the performance of the model in terms of latency as well as cost.
+   1. These experiments are conducted to evaluate the performance of the model in terms of latency as well as cost.
+   python buffer.py --batch_size 5 --time_out 1 --arrival_process trace --trace_path ./traces/MMPP_arrival --function_name inception-v4 --memory 3008 
+
 ----
 **Run model**
 - Model takes the arrival process i.e. inter-arrival time to calculate the efficient memory size, batch size and batch timeout. 
