@@ -35,6 +35,8 @@ Our updated [model and lambda package](https://drive.google.com/drive/folders/1R
 Usage:
 python buffer.py (default setting)
 
+must be run with python3
+
 - Run experiment with default  Exponential arrival python buffer.py (default setting).
    1. In default setting it will run experiments  for exponential arrival.
    2. Memory size is set to 3008 MB.
@@ -45,9 +47,11 @@ python buffer.py (default setting)
 -Run with exponential arrival:
 
 python buffer.py --batch_size 5 --time_out 1 --arrival_process exp --inter_arrival 10 --function_name inception-v4 --memory 3008 
-- Run experiments using a trace python serverless.py trace $tracelocation
-   1. These experiments are conducted to evaluate the performance of the model in terms of latency as well as cost.
+- Run experiments using a trace
+   1. These experiments are conducted to evaluate the performance of the model in terms of latency as well as cost for a workload trace.
+   
    python buffer.py --batch_size 5 --time_out 1 --arrival_process trace --trace_path ./traces/MMPP_arrival --function_name inception-v4 --memory 3008 
+   
 -- To print the help, try: python buffer.py --help_
 
 -----
