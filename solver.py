@@ -661,9 +661,6 @@ if __name__ == "__main__":
 	if model == None:
 		print('Please, provide a model.')
 		exit(-1)
-	elif(model != 'Resnet' and model != 'InceptionV4' and model != 'mxnet-resnet50'):
-		print('Not supported model.')
-		exit(-1)
 
 	if percentile == None or percentile <= 0 or percentile >= 1:
 		print('Please, provide a correct percentile value.')
@@ -672,15 +669,9 @@ if __name__ == "__main__":
 	if constraint == None:
 		print('Please, provide a constraint.')
 		exit(-1)
-	elif(constraint != 'latency' and constraint != 'cost'):
-		print('Not supported constraint.')
-		exit(-1)
 
 	if trace == None:
 		print('Please, provide a trace.')
-		exit(-1)
-	elif(trace != 'NYS' and trace != 'Twitter'):
-		print('Not supported trace.')
 		exit(-1)
 	
 	solver(model, trace, slo, percentile, constraint, start, end)
