@@ -36,11 +36,11 @@ Usage:
 python buffer.py (default setting)
 
 - Run experiment with default  Exponential arrival python buffer.py (default setting).
-   1. In default setting it will run experiments  for expontential arrival.
+   1. In default setting it will run experiments  for exponential arrival.
    2. Memory size is set to 3008 MB.
    3. Workload intensity is set to 20 request per second.
-   4. Batch size value in serveless.py (default 5).
-   5. Timeout values can also be varied (default 1 second).
+   4. Batch size value in 5 .
+   5. Timeout values is 1 second.
    
 -Run with exponential arrival:
 
