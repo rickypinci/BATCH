@@ -27,8 +27,8 @@ https://drive.google.com/drive/folders/1g7An2M7bIVJhdUFQESInCX5zokS0EF0r?usp=sha
    3. matplotlib
    4. scipy
    5. ortools
-- To print the help, try _python solver.py --help_
-- To run the solver, try _python solver.py --model TF-inceptionV4 --percentile 0.95 --slo 0.00003 --constraint cost --trace Twitter --start 1 --end 1_
+- To print the help, try: _python solver.py --help_
+- To run the solver, try: _python solver.py --model TF-inceptionV4 --percentile 0.95 --slo 0.00003 --constraint cost --trace Twitter --start 1 --end 1_
 ---
 **Run Experiments**
 - Run experiment with Exponential arrival python serverless.py exp (default setting).
