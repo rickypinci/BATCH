@@ -18,9 +18,17 @@ Our updated model and lambda package with batching enabled are located in the li
 
 https://drive.google.com/drive/folders/1g7An2M7bIVJhdUFQESInCX5zokS0EF0r?usp=sharing
 
-
+-----
 **Find optimal configuration**
 - To find the optimal configuration of the serverless environment, run the _solver.py_ python script.
+- _solver.py_ must be run with python3 and requires the following modules:
+   1. argparse
+   2. numpy
+   3. matplotlib
+   4. scipy
+   5. ortools
+- To print the help, try _python solver.py --help_
+- To run the solver, try _python solver.py --model TF-inceptionV4 --percentile 0.95 --slo 0.00003 --constraint cost --trace Twitter --start 1 --end 1_
 ---
 **Run Experiments**
 - Run experiment with Exponential arrival python serverless.py exp (default setting).
