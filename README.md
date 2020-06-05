@@ -19,6 +19,8 @@ Our updated model and lambda package with batching enabled are located in the li
 https://drive.google.com/drive/folders/1g7An2M7bIVJhdUFQESInCX5zokS0EF0r?usp=sharing
 
 
+**Find optimal configuration**
+- To find the optimal configuration of the serverless environment, run the _solver.py_ python script.
 ---
 **Run Experiments**
 - Run experiment with Exponential arrival python serverless.py exp (default setting).
