@@ -10,7 +10,7 @@ BATCH: Adaptive Batching for Efficient MachineLearning Serving on Serverless Pla
 ---
 **Deployment:**
 
-To deploy the Lambda serverless function follow the instruction in the [How to deploy deep learning modeks with aws lambda and tensorflow](https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/). However, this tutorial do not support batching.
+To deploy the Lambda serverless function follow the instruction in the [How to deploy deep learning models with aws lambda and tensorflow](https://aws.amazon.com/blogs/machine-learning/how-to-deploy-deep-learning-models-with-aws-lambda-and-tensorflow/). However, this tutorial do not support batching.
 
 
 Our updated [model and lambda package](https://drive.google.com/drive/folders/1g7An2M7bIVJhdUFQESInCX5zokS0EF0r?usp=sharing) supports batching. The batching enabled lambda packge can be deployed by following the same steps mentioned in the demo and just by replacing the model file and packge file. We use Tensorflow 1.8 in our packge. At the time of our experiments this was the most latest Tensorflow version which could be zipped to 50 MB (Lambda limitation). 
@@ -45,8 +45,8 @@ Our updated [model and lambda package](https://drive.google.com/drive/folders/1g
 -----
 **Collect logs**
 - Once the experiments are done three log files are generated for each experiment.
-  1. Lambda logs: These logs contains all the information regarding each request i.e. print out values in the lambda function, init time, execution time, billing time, memory utilization, exceptions if any and error if any.
-  2. Lambda per batch logs: These logs contains information regarding logs i.e. Batch starting time, Batch ending time, Batch size and Batch serivce time.
+  1. Lambda logs: These logs contains all the information regarding each lambda invocation i.e. print out values in the lambda function, init time, execution time, billing time, memory utilization, exceptions if any and error if any.
+  2. Lambda per batch logs: These logs contains information regardin batch i.e. Batch starting time, Batch ending time, Batch size and Batch serivce time.
   3. Lmabda pre request logs: This file contains all the information of each request i.e. arrival time, departure time, latency, and size of batch it was served in.
   
   
