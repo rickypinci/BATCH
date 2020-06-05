@@ -1,4 +1,4 @@
-# BATCH
+# BATCH ![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3872213.svg)
 BATCH: Adaptive Batching for Efficient MachineLearning Serving on Serverless Platforms
 
 
