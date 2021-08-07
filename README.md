@@ -1,8 +1,8 @@
 # BATCH [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3872213.svg)](http://doi.org/10.5281/zenodo.3872213)
-BATCH: Adaptive Batching for Efficient MachineLearning Serving on Serverless Platforms
+BATCH: Machine Learning Inference Serving on Serverless Platforms with Adaptive Batching ([DOI](https://doi.org/10.1109/SC41405.2020.00073))
 
 
-**prerequisite**
+**Prerequisite**
 
 - [AWS  Cli](https://aws.amazon.com/cli/)
 - [boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
