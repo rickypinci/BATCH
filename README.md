@@ -1,5 +1,5 @@
 # BATCH [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3872213.svg)](http://doi.org/10.5281/zenodo.3872213)
-BATCH: Machine Learning Inference Serving on Serverless Platforms with Adaptive Batching ([DOI](https://doi.org/10.1109/SC41405.2020.00073))
+BATCH: Machine Learning Inference Serving on Serverless Platforms with Adaptive Batching [[DOI](https://doi.org/10.1109/SC41405.2020.00073)]
 
 
 **Prerequisite**
